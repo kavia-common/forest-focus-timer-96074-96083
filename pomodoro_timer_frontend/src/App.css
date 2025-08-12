@@ -1,104 +1,292 @@
-/* CSS Variables for Theme Management */
 :root {
-  /* Light theme colors */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --text-primary: #282c34;
-  --text-secondary: #61dafb;
-  --border-color: #e9ecef;
-  --button-bg: #007bff;
-  --button-text: #ffffff;
+  --primary: #356859;
+  --secondary: #37966F;
+  --accent: #B9E4C9;
+  --earth: #5C4033;
+  --text: #163626;
+  --text-soft: rgba(22, 54, 38, 0.8);
+  --bg: #F2F7F4;
+  --ring-bg: rgba(53, 104, 89, 0.15);
+  --ring: #2E7D6B;
+  --ring-break: #6BAA75;
+  --leaf: #3F8F6B;
+  --leaf-light: #8CC7A2;
+  --danger: #B5534D;
 }
 
-[data-theme="dark"] {
-  /* Dark theme colors */
-  --bg-primary: #1a1a1a;
-  --bg-secondary: #282c34;
-  --text-primary: #ffffff;
-  --text-secondary: #61dafb;
-  --border-color: #404040;
-  --button-bg: #0056b3;
-  --button-text: #ffffff;
-}
-
-.App {
-  text-align: center;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  min-height: 100vh;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0e1a16;
+    --text: #EAF6EF;
+    --text-soft: rgba(234, 246, 239, 0.8);
+    --ring-bg: rgba(185, 228, 201, 0.08);
+    --ring: #7ED6C6;
+    --ring-break: #A4E7B7;
+    --leaf: #7BBF97;
+    --leaf-light: #C7ECD6;
   }
 }
 
-.App-header {
-  background-color: var(--bg-secondary);
+* { box-sizing: border-box; }
+
+html, body, #root {
+  height: 100%;
+  background: var(--bg);
+}
+
+body {
+  margin: 0;
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+}
+
+.ForestApp {
+  position: relative;
   min-height: 100vh;
+  overflow: hidden;
+}
+
+.bg-gradient {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(1200px 600px at 20% 10%, rgba(185,228,201,0.3), transparent 60%),
+              radial-gradient(800px 400px at 90% 20%, rgba(55,150,111,0.25), transparent 55%),
+              linear-gradient(180deg, #e7f2ea 0%, var(--bg) 60%);
+  pointer-events: none;
+  animation: lightShift 20s ease-in-out infinite alternate;
+}
+
+.bg-texture {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cg fill='%23356859' fill-opacity='0.06'%3E%3Cpath d='M0 0h160v160H0z'/%3E%3Cpath d='M30 0c15 20 35 20 50 0M80 80c20 15 40 15 50 0M10 120c25 20 45 20 70 0' stroke='%2337966F' stroke-opacity='0.08' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-size: 240px 240px;
+  opacity: .6;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  animation: drift 60s linear infinite;
+}
+
+@keyframes lightShift {
+  from { filter: hue-rotate(0deg) brightness(1); }
+  to   { filter: hue-rotate(-10deg) brightness(1.05); }
+}
+
+@keyframes drift {
+  from { transform: translateY(0); }
+  to { transform: translateY(-240px); }
+}
+
+.top-bar {
+  position: relative;
+  z-index: 2;
+  padding: 20px clamp(16px, 4vw, 40px);
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.quote {
+  flex: 1 1 auto;
+  font-size: clamp(14px, 2.2vw, 18px);
+  color: var(--text-soft);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.quote-mark { color: var(--secondary); font-weight: 700; }
+
+.sound-controls { display: flex; align-items: center; gap: 12px; }
+
+.center-stage {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  padding: 20px clamp(16px, 4vw, 40px);
+}
+
+.timer-container {
+  position: relative;
+  width: min(80vw, 320px);
+  height: min(80vw, 320px);
+  margin: 12px auto 8px;
+  display: grid;
+  place-items: center;
+}
+
+.time-readout {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  gap: 4px;
+  text-align: center;
+}
+
+.mode-label {
+  font-size: 14px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--secondary);
+}
+
+.time {
+  font-feature-settings: "tnum" on, "lnum" on;
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(42px, 9vw, 54px);
+  font-weight: 700;
+  color: var(--text);
+  text-shadow: 0 1px 0 rgba(0,0,0,0.03);
+}
+
+.session-count {
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--text-soft);
+}
+
+.bottom-controls {
+  display: grid;
+  gap: 16px;
+  margin-top: 10px;
+  width: min(92vw, 480px);
+}
+
+.controls {
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: var(--text-primary);
-  transition: background-color 0.3s ease;
-  position: relative;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
-.App-link {
-  color: var(--text-secondary);
-  transition: color 0.3s ease;
-}
-
-.theme-toggle {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background-color: var(--button-bg);
-  color: var(--button-text);
-  border: none;
-  border-radius: 8px;
-  padding: 10px 20px;
-  font-size: 14px;
-  font-weight: 600;
+.btn {
+  appearance: none;
+  border: 0;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: var(--primary);
+  color: white;
+  font-weight: 700;
+  letter-spacing: .02em;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform .1s ease, filter .2s ease, background .2s ease;
+  box-shadow: 0 8px 24px rgba(53,104,89,0.18);
+}
+.btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
+.btn:active { transform: translateY(0); filter: brightness(.98); }
+
+.btn.secondary { background: var(--secondary); }
+.btn.danger { background: var(--danger); }
+
+.settings {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 10px;
+  align-items: center;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(53,104,89,0.12);
+  border-radius: 14px;
+  padding: 10px;
+}
+.settings label {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-soft);
+}
+.settings input[type="number"] {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(53,104,89,0.2);
+  background: rgba(255,255,255,0.9);
+  color: var(--text);
+  font-weight: 600;
+}
+.settings button {
+  white-space: nowrap;
 }
 
-.theme-toggle:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  opacity: 0.9;
+.progress-ring {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.progress-ring svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.progress-ring .bg {
+  stroke: var(--ring-bg);
+}
+.progress-ring .fg {
+  stroke: var(--ring);
+  transition: stroke-dashoffset .2s linear, stroke .2s ease;
+}
+.progress-ring[data-mode="break"] .fg {
+  stroke: var(--ring-break);
 }
 
-.theme-toggle:active {
-  transform: translateY(0);
+.plant-wrap {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: end center;
+  pointer-events: none;
+}
+.plant {
+  width: 56%;
+  max-width: 240px;
+  height: auto;
+  transform-origin: bottom center;
+  transition: transform .5s ease, filter .3s ease;
+  filter: drop-shadow(0 8px 16px rgba(0,0,0,0.08));
+}
+.plant[data-mode="break"] { filter: saturate(0.9) brightness(1.05); }
+
+.footer {
+  position: relative;
+  z-index: 2;
+  padding: 18px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-soft);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Leaves animation (break mode) */
+.leaves {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+.leaf {
+  position: absolute;
+  top: -8%;
+  width: 14px;
+  height: 8px;
+  border-radius: 14px 14px 14px 14px / 8px 8px 8px 8px;
+  background: linear-gradient(90deg, var(--leaf) 0%, var(--leaf-light) 100%);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  opacity: .9;
+  transform: rotate(0deg);
+  animation: leafFall linear forwards;
+}
+@keyframes leafFall {
+  0% { transform: translateY(-10%) translateX(0) rotate(0deg); }
+  100% { transform: translateY(120vh) translateX(var(--x drift, 0)) rotate(360deg); }
 }
 
-/* Responsive design for mobile */
-@media (max-width: 768px) {
-  .theme-toggle {
-    top: 10px;
-    right: 10px;
-    padding: 8px 16px;
-    font-size: 12px;
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .bg-gradient, .bg-texture, .leaf, .plant, .fg {
+    animation: none !important;
+    transition: none !important;
   }
 }

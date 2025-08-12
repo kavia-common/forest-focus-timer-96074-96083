@@ -1,8 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+test('renders timer controls and labels', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  expect(screen.getByRole('group', { name: /Timer controls/i })).toBeInTheDocument();
+  expect(screen.getByText(/Focus|Break/)).toBeInTheDocument();
+  expect(screen.getByRole('application', { name: /Pomodoro timer/i })).toBeInTheDocument();
 });
